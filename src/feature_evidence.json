@@ -1,0 +1,45 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-remove-the-background-music-section-from-the-landing-page-so-no-music-controls-are-shown-and-no-background-audio-element-is-mounted",
+      "featureTitle": "Remove the background music section from the Landing page so no music controls are shown and no background audio element is mounted.",
+      "files": [
+        "frontend/src/components/MusicPlayer.tsx",
+        "frontend/src/pages/LandingPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-proposal-yes-button-flow-to-skip-the-current-heart-celebration-page-and-navigate-directly-to-the-final-page-after-the-user-taps-yes",
+      "featureTitle": "Update the proposal YES button flow to skip the current heart celebration page and navigate directly to the final page after the user taps YES.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/CelebrationPage.tsx",
+        "frontend/src/pages/FinalPage.tsx",
+        "frontend/src/pages/ProposalQuestionPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-17"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

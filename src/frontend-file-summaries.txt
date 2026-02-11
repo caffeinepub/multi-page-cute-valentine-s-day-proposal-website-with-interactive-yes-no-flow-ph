@@ -1,0 +1,18 @@
+{
+  "frontend/src/content/valentineContent.ts": "Centralized configuration file with TypeScript interfaces for Valentine's Day content including recipient name, page headings, photo memories with IDs, multiple love letters with IDs, and date plan details. Exports both typed interfaces and default content.",
+  "frontend/src/index.css": "Global CSS file with Tailwind directives, custom Valentine's Day themed OKLCH color palette for light and dark modes, smooth scrolling behavior, reduced-motion support, and custom float animation keyframes.",
+  "frontend/src/editing/localDraftStorage.ts": "Client-side persistence utilities for saving and loading editable Valentine content to/from localStorage with versioning, safe JSON parsing, and reset-to-defaults functionality.",
+  "frontend/src/editing/imageSourceUtils.ts": "Validation and conversion utilities for image sources including URL protocol validation, data URL size limits, and file-to-data-URL conversion for local image uploads.",
+  "frontend/src/editing/EditableContentProvider.tsx": "React context provider managing editable Valentine content state with methods for updating text fields, adding/editing/deleting letters and photos, auto-saving to localStorage, and resetting to defaults.",
+  "frontend/src/editing/EditableText.tsx": "Reusable inline text editing component that renders as editable input/textarea in edit mode or static text otherwise, with click-to-edit functionality and visual hover indicators.",
+  "frontend/src/editing/EditModeToggle.tsx": "Floating action button that toggles edit mode on/off with dropdown menu for exiting edit mode and resetting content to defaults via confirmation dialog.",
+  "frontend/src/editing/LettersEditor.tsx": "Edit mode UI for managing multiple love letters with add/edit/delete capabilities using dialog forms for letter heading and body text with validation.",
+  "frontend/src/editing/PhotoMemoriesEditor.tsx": "Edit mode UI for managing photo memories with add/edit/delete capabilities, supporting both image URL input and local file upload converted to data URLs, with preview and validation.",
+  "frontend/src/App.tsx": "Main application component with router configuration including landing, photos, love note, proposal, and final routes, with celebration route removed.",
+  "frontend/src/components/Layout.tsx": "Global layout component with header outlet, footer with attribution, and EditModeToggle button positioned in bottom-right corner.",
+  "frontend/src/pages/LandingPage.tsx": "Landing page with editable heading, subheading, and button text using EditableText components, with background music player removed.",
+  "frontend/src/pages/PhotosMemoriesPage.tsx": "Photos page with editable heading and subheading, PhotoMemoriesEditor shown in edit mode, and PhotoGallery displaying photos from editable content context.",
+  "frontend/src/pages/LoveNotePage.tsx": "Love note page displaying multiple letters from editable content with LettersEditor shown in edit mode, preserving AnimatedText animations and reduced-motion support.",
+  "frontend/src/pages/ProposalQuestionPage.tsx": "Proposal question page with editable question text, YES/NO button labels, and try-again message, now navigating to '/final' route on YES click.",
+  "frontend/src/pages/FinalPage.tsx": "Final page displaying celebration message and date plan details using Card and Accordion components from shadcn/ui."
+}

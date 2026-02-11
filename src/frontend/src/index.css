@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 1rem;
+        
+        /* Valentine's Day Pastel Palette - Light Mode */
+        --background: 0.99 0.01 10;
+        --foreground: 0.25 0.02 10;
+        --card: 1 0 0;
+        --card-foreground: 0.25 0.02 10;
+        --popover: 1 0 0;
+        --popover-foreground: 0.25 0.02 10;
+        --primary: 0.75 0.15 10;
+        --primary-foreground: 1 0 0;
+        --secondary: 0.95 0.02 10;
+        --secondary-foreground: 0.25 0.02 10;
+        --muted: 0.96 0.01 10;
+        --muted-foreground: 0.55 0.02 10;
+        --accent: 0.92 0.03 10;
+        --accent-foreground: 0.25 0.02 10;
+        --destructive: 0.55 0.22 15;
+        --destructive-foreground: 1 0 0;
+        --border: 0.92 0.02 10;
+        --input: 0.92 0.02 10;
+        --ring: 0.75 0.15 10;
+        
+        /* Valentine Custom Colors */
+        --valentine-accent: 0.65 0.20 355;
+        --valentine-accent-dark: 0.55 0.22 355;
+        --valentine-light: 0.97 0.03 350;
+        --valentine-lighter: 0.99 0.01 350;
+        --valentine-border: 0.90 0.03 350;
+        --valentine-text-dark: 0.30 0.03 350;
+        --valentine-text-light: 0.95 0.01 350;
+        
+        --chart-1: 0.65 0.20 355;
+        --chart-2: 0.70 0.15 10;
+        --chart-3: 0.75 0.12 30;
+        --chart-4: 0.80 0.10 50;
+        --chart-5: 0.85 0.08 70;
+    }
+
+    .dark {
+        --background: 0.15 0.02 350;
+        --foreground: 0.95 0.01 350;
+        --card: 0.20 0.03 350;
+        --card-foreground: 0.95 0.01 350;
+        --popover: 0.18 0.03 350;
+        --popover-foreground: 0.95 0.01 350;
+        --primary: 0.85 0.12 355;
+        --primary-foreground: 0.15 0.02 350;
+        --secondary: 0.25 0.03 350;
+        --secondary-foreground: 0.95 0.01 350;
+        --muted: 0.25 0.03 350;
+        --muted-foreground: 0.65 0.02 350;
+        --accent: 0.30 0.04 350;
+        --accent-foreground: 0.95 0.01 350;
+        --destructive: 0.60 0.20 15;
+        --destructive-foreground: 0.95 0.01 350;
+        --border: 0.30 0.03 350;
+        --input: 0.30 0.03 350;
+        --ring: 0.70 0.15 355;
+        
+        /* Valentine Custom Colors - Dark Mode */
+        --valentine-accent: 0.70 0.18 355;
+        --valentine-accent-dark: 0.60 0.20 355;
+        --valentine-dark: 0.18 0.03 350;
+        --valentine-darker: 0.15 0.03 350;
+        --valentine-border: 0.30 0.03 350;
+        --valentine-text-dark: 0.30 0.03 350;
+        --valentine-text-light: 0.95 0.01 350;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+    }
+    
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+        
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+@layer utilities {
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-10px) rotate(5deg);
+        }
+        50% {
+            transform: translateY(-20px) rotate(0deg);
+        }
+        75% {
+            transform: translateY(-10px) rotate(-5deg);
+        }
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+}

@@ -1,2 +1,3 @@
-# multi-page-cute-valentine-s-day-proposal-website-with-interactive-yes-no-flow-ph
-Exported from Caffeine project: Multi-page cute Valentine’s Day proposal website with interactive Yes/No flow, photos, love note, music, and celebration
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

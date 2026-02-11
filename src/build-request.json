@@ -1,0 +1,56 @@
+{
+  "kind": "build_request",
+  "title": "Remove background music UI and skip the celebration page after tapping YES",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-16",
+      "text": "Remove the background music section from the Landing page so no music controls are shown and no background audio element is mounted.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "remove the  background music section"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Landing page no longer renders the floating music player UI.",
+        "No <audio> element for background music is mounted anywhere in the UI by default.",
+        "All other Landing page content (heading, subheading, continue button, decorations) remains unchanged."
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Update the proposal YES button flow to skip the current heart celebration page and navigate directly to the final page after the user taps YES.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "remove the heart celebration page after i tap on YESS instead land directly on last pae after i tap on YESS"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Tapping the YES button on the proposal page does not navigate to the current celebration page route.",
+        "After tapping YES, the app navigates directly to the final page route used for the end of the experience.",
+        "The removed/skipped celebration page is not reachable via normal in-app navigation (and any route/table-of-routes is updated accordingly)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "No backend changes are required; keep the backend as-is (single Motoko actor).",
+    "Use English for any user-facing text."
+  ],
+  "nonGoals": [
+    "Adding new background music features or settings.",
+    "Adding new pages or changing the overall visual theme beyond what is required to remove the music section and adjust YES navigation."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

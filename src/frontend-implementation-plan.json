@@ -1,0 +1,59 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Remove Landing music UI and route YES directly to the final page",
+  "requirements": [
+    {
+      "id": "REQ-16",
+      "summary": "Remove the Landing page background music UI so no music controls render and no background audio element mounts by default.",
+      "acceptanceCriteria": [
+        "Landing page no longer renders the floating music player UI.",
+        "No <audio> element for background music is mounted anywhere in the UI by default.",
+        "All other Landing page content (heading, subheading, continue button, decorations) remains unchanged."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/LandingPage.tsx",
+          "operation": "modify",
+          "description": "Remove the MusicPlayer import and the <MusicPlayer /> render from the Landing page while leaving all other content/structure unchanged."
+        },
+        {
+          "path": "frontend/src/components/MusicPlayer.tsx",
+          "operation": "delete",
+          "description": "Remove the MusicPlayer component implementation so the background <audio> element and related UI controls cannot be mounted by default."
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Change the proposal YES flow to skip the celebration page and navigate directly to the final page, and remove the celebration route from normal navigation.",
+      "acceptanceCriteria": [
+        "Tapping the YES button on the proposal page does not navigate to the current celebration page route.",
+        "After tapping YES, the app navigates directly to the final page route used for the end of the experience.",
+        "The removed/skipped celebration page is not reachable via normal in-app navigation (and any route/table-of-routes is updated accordingly)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/FinalPage.tsx",
+          "operation": "create",
+          "description": "Create a new FinalPage that represents the end of the experience, using the existing celebration content (message/date plan) and shadcn-ui Card/Accordion components for layout (Verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/pages/ProposalQuestionPage.tsx",
+          "operation": "modify",
+          "description": "Update the YES button handler to navigate directly to the final page route (e.g., '/final') instead of the current celebration route."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the new FinalPage into the router as the end-of-experience route and remove the celebration page route/import so it is not reachable through normal in-app routing."
+        },
+        {
+          "path": "frontend/src/pages/CelebrationPage.tsx",
+          "operation": "delete",
+          "description": "Remove the now-skipped CelebrationPage so there is no in-app route/page for the intermediate heart celebration step."
+        }
+      ]
+    }
+  ]
+}
