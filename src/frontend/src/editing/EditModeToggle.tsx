@@ -1,4 +1,4 @@
-import { Edit3, RotateCcw, X } from 'lucide-react';
+import { Edit3, RotateCcw, X, Upload, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
@@ -19,14 +20,33 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useState } from 'react';
 import { useEditableContent } from './EditableContentProvider';
+import { Badge } from '@/components/ui/badge';
 
 export default function EditModeToggle() {
-  const { isEditMode, setEditMode, resetContent } = useEditableContent();
+  const { 
+    isEditMode, 
+    setEditMode, 
+    resetContent, 
+    publishDraft, 
+    reloadPublished,
+    isPublishing,
+    isDraft,
+  } = useEditableContent();
   const [showResetDialog, setShowResetDialog] = useState(false);
+  const [showReloadDialog, setShowReloadDialog] = useState(false);
 
   const handleReset = () => {
     resetContent();
     setShowResetDialog(false);
+  };
+
+  const handlePublish = async () => {
+    await publishDraft();
+  };
+
+  const handleReload = async () => {
+    await reloadPublished();
+    setShowReloadDialog(false);
   };
 
   return (
@@ -54,12 +74,47 @@ export default function EditModeToggle() {
                 Editing
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-64">
+              <DropdownMenuLabel className="flex items-center justify-between">
+                <span>Status</span>
+                {isDraft ? (
+                  <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
+                    Draft (not published)
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
+                    Published
+                  </Badge>
+                )}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              
+              <DropdownMenuItem 
+                onClick={handlePublish}
+                disabled={isPublishing || !isDraft}
+                className="text-green-600 focus:text-green-600 font-medium"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                {isPublishing ? 'Publishing...' : 'Publish changes'}
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem 
+                onClick={() => setShowReloadDialog(true)}
+                disabled={!isDraft}
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Reload published version
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator />
+              
               <DropdownMenuItem onClick={() => setEditMode(false)}>
                 <X className="h-4 w-4 mr-2" />
                 Exit Edit Mode
               </DropdownMenuItem>
+              
               <DropdownMenuSeparator />
+              
               <DropdownMenuItem
                 onClick={() => setShowResetDialog(true)}
                 className="text-destructive focus:text-destructive"
@@ -85,6 +140,23 @@ export default function EditModeToggle() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleReset} className="bg-destructive hover:bg-destructive/90">
               Reset
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showReloadDialog} onOpenChange={setShowReloadDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reload Published Version?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will discard your current draft and reload the last published version. Your unsaved changes will be lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleReload}>
+              Reload
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

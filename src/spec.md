@@ -1,10 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Remove the landing page background music UI/audio and make the YES button skip the celebration page to go straight to the final page.
+**Goal:** Add a real “Publish updated edits” flow so edited Valentine photos/letters can be published to the backend and shown consistently to all visitors across browsers/devices.
 
 **Planned changes:**
-- Remove the background music section from the Landing page so no music controls render and no background `<audio>` element mounts by default.
-- Update the proposal YES button navigation flow to bypass the current heart celebration page and navigate directly to the final page route, updating routes/navigation so the celebration page is not reached through normal app use.
+- Add backend stable persistence for the currently published ValentineContent, with methods to fetch published content and to publish/overwrite content.
+- Restrict publishing to an authorized admin identity (caller principal allowlist) and return clear errors for unauthorized publish attempts.
+- Update frontend content loading to use backend-published content as the default base, while continuing to auto-save local draft edits in localStorage.
+- Add an Edit Mode “Publish changes” UI action that sends the current draft content to the backend, showing English success/error confirmations and keeping the local draft on failure.
+- Add an Edit Mode status indicator showing “Draft (not published)” vs “Published”, plus a one-click action to discard the local draft and reload the latest published content from the backend.
 
-**User-visible outcome:** The Landing page shows no music player or background audio, and tapping YES takes the user directly to the final page without an intermediate celebration screen.
+**User-visible outcome:** Editors can publish their updated photos/letters so everyone sees the new version on reload (including in private mode/other devices), while still being able to keep local drafts, see draft vs published status, and reload the published version when needed.

@@ -1,38 +1,53 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T19:31:08.354Z",
-  "summary": "REQ-16 appears implemented by removing the music player UI from LandingPage (no music controls shown there). REQ-17 appears implemented by changing the YES button to navigate directly to '/final' and updating the router to remove the celebration route and add a final route. However, the diff summary does not provide enough evidence to confirm that no background-music <audio> element is mounted anywhere in the app by default.",
+  "generatedAt": "2026-02-13T06:26:59.653Z",
+  "summary": "Frontend adds an editable content provider that differentiates local draft vs backend published content, plus Edit Mode UI actions for “Publish changes” and “Reload published version” with English status/toasts. Backend changes show a new ValentineContent type and an in-memory publishedContent value, but the diff summary does not provide clear evidence of the required query/update publish API, stable persistence, or strict admin-only publish enforcement.",
   "missing_requirements": [
     {
-      "id": "REQ-16",
-      "requirement": "No <audio> element for background music is mounted anywhere in the UI by default.",
-      "reason": "The LandingPage no longer shows music UI, but the diff summary does not show the updated contents of MusicPlayer.tsx (or other potential audio mounts), so it's not possible to verify that no <audio> element is mounted anywhere by default.",
+      "id": "REQ-1",
+      "requirement": "Backend persistence for published ValentineContent with (1) a query method to fetch currently published content, (2) an update method to overwrite/publish content restricted to authorized admin, and (3) stable storage across upgrades.",
+      "reason": "The diff shows a `publishedContent : ValentineContent` variable and type definitions, but does not show any `getPublishedContent` query method, any `updatePublishedContent` update method, any stable variable usage for persistence across upgrades, or explicit admin allowlist enforcement for publishing.",
       "evidence": [
-        "frontend/src/components/MusicPlayer.tsx (modified, content not shown)",
-        "frontend/src/pages/LandingPage.tsx (music player removed but does not prove absence elsewhere)"
+        "backend/main.mo"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Added a new FinalPage with additional UI (date plan card, accordion of activities, icons) rather than only updating navigation to an existing final route/page.",
-      "reason": "REQ-17 asks to skip the celebration page and navigate directly to the final page route; it does not explicitly request creating a brand-new FinalPage implementation or adding new final-page content/features.",
+      "description": "Admin-token / secret-based access-control initialization via URL parameter/session storage (e.g., `caffeineAdminToken`) and calling an `_initializeAccessControlWithSecret` method on the backend actor.",
+      "reason": "The BuildRequest requires admin authorization via Internet Identity/caller principal checks (e.g., allowlist). Introducing a URL/session “secret token” bootstrap flow is not requested and appears to be an alternate authorization mechanism.",
       "evidence": [
-        "frontend/src/pages/FinalPage.tsx (added)",
-        "frontend/src/App.tsx (imports and routes to new FinalPage at '/final')"
+        "frontend/src/utils/urlParams.ts",
+        "frontend/src/hooks/useActor.ts"
+      ]
+    },
+    {
+      "description": "Backend user profile management APIs (get/save caller profile, view profile) with additional authorization checks.",
+      "reason": "The BuildRequest is specifically about publishing edited Valentine content; user profile management is not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Backend authorization framework integration (MixinAuthorization / AccessControl initialization) beyond the requested simple admin allowlist for publishing content.",
+      "reason": "While some authorization is necessary, the request only specifies restricting publish to an authorized admin identity (e.g., allowlist). The diff introduces a broader authorization system not mentioned in the request.",
+      "evidence": [
+        "backend/main.mo"
       ]
     }
   ],
-  "confidence": 0.66,
+  "confidence": 0.64,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
     "frontend/src/App.tsx",
-    "frontend/src/components/MusicPlayer.tsx",
-    "frontend/src/pages/CelebrationPage.tsx",
-    "frontend/src/pages/FinalPage.tsx",
-    "frontend/src/pages/LandingPage.tsx",
-    "frontend/src/pages/ProposalQuestionPage.tsx",
+    "frontend/src/editing/EditModeToggle.tsx",
+    "frontend/src/editing/EditableContentProvider.tsx",
+    "frontend/src/editing/localDraftStorage.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/utils/urlParams.ts",
     "project_state.json"
   ]
 }

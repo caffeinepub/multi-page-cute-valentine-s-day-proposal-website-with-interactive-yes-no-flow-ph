@@ -1,13 +1,22 @@
 import { RouterProvider, createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
-import { ThemeProvider } from 'next-themes';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { EditableContentProvider } from './editing/EditableContentProvider';
+import { Toaster } from '@/components/ui/sonner';
 import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
 import PhotosMemoriesPage from './pages/PhotosMemoriesPage';
 import LoveNotePage from './pages/LoveNotePage';
 import ProposalQuestionPage from './pages/ProposalQuestionPage';
 import FinalPage from './pages/FinalPage';
-import { Toaster } from '@/components/ui/sonner';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 const rootRoute = createRootRoute({
   component: Layout,
@@ -61,11 +70,11 @@ declare module '@tanstack/react-router' {
 
 export default function App() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+    <QueryClientProvider client={queryClient}>
       <EditableContentProvider>
         <RouterProvider router={router} />
         <Toaster />
       </EditableContentProvider>
-    </ThemeProvider>
+    </QueryClientProvider>
   );
 }

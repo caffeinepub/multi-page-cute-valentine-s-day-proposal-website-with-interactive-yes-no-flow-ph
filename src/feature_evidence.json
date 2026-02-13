@@ -2,42 +2,63 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-remove-the-background-music-section-from-the-landing-page-so-no-music-controls-are-shown-and-no-background-audio-element-is-mounted",
-      "featureTitle": "Remove the background music section from the Landing page so no music controls are shown and no background audio element is mounted.",
+      "featureId": "feature-update-the-frontend-content-loading-logic-to-distinguish-between-a-the-globally-published-content-fetched-from-the-backend-and-b-the-local-draft-edits-stored-in-localstorage-on-initial-load-fetch-published-content-from-the-backend-and-use-it-as-the-base-content-allow-local-edits-to-continue-to-auto-save-as-a-draft-in-localstorage",
+      "featureTitle": "Update the frontend content-loading logic to distinguish between (a) the globally published content (fetched from the backend) and (b) the local draft edits (stored in localStorage). On initial load, fetch published content from the backend and use it as the base content; allow local edits to continue to auto-save as a draft in localStorage.",
       "files": [
-        "frontend/src/components/MusicPlayer.tsx",
-        "frontend/src/pages/LandingPage.tsx"
+        "frontend/src/editing/EditableContentProvider.tsx",
+        "frontend/src/editing/localDraftStorage.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-16"
+        "REQ-2"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-proposal-yes-button-flow-to-skip-the-current-heart-celebration-page-and-navigate-directly-to-the-final-page-after-the-user-taps-yes",
-      "featureTitle": "Update the proposal YES button flow to skip the current heart celebration page and navigate directly to the final page after the user taps YES.",
+      "featureId": "feature-add-a-publish-action-in-the-edit-mode-ui-that-sends-the-current-edited-draft-content-to-the-backend-publish-endpoint-then-confirms-success-and-updates-the-app-to-reflect-that-the-published-version-is-now-updated",
+      "featureTitle": "Add a “Publish” action in the Edit Mode UI that sends the current edited draft content to the backend publish endpoint, then confirms success and updates the app to reflect that the published version is now updated.",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/pages/CelebrationPage.tsx",
-        "frontend/src/pages/FinalPage.tsx",
-        "frontend/src/pages/ProposalQuestionPage.tsx"
+        "frontend/src/editing/EditModeToggle.tsx",
+        "frontend/src/editing/EditableContentProvider.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-17"
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-small-status-indicator-for-editors-that-communicates-whether-they-are-viewing-local-draft-changes-vs-the-currently-published-version-and-provide-a-one-click-way-to-discard-local-draft-and-reload-the-latest-published-content",
+      "featureTitle": "Add a small status indicator for editors that communicates whether they are viewing local draft changes vs the currently published version, and provide a one-click way to discard local draft and reload the latest published content.",
+      "files": [
+        "frontend/src/editing/EditModeToggle.tsx",
+        "frontend/src/editing/EditableContentProvider.tsx",
+        "frontend/src/editing/localDraftStorage.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
       ],
       "confidence": "high"
     }

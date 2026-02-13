@@ -54,6 +54,15 @@ export function clearDraftContent(): void {
   }
 }
 
+export function hasDraftContent(): boolean {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return !!stored;
+  } catch (error) {
+    return false;
+  }
+}
+
 export function resetToDefaults(): ValentineContent {
   clearDraftContent();
   return { ...defaultValentineContent };

@@ -8,10 +8,108 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const idlService = IDL.Service({});
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
+export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const FeaturedDapp = IDL.Record({
+  'projectName' : IDL.Text,
+  'author' : IDL.Text,
+  'dappBenefits' : IDL.Vec(IDL.Text),
+  'image' : IDL.Text,
+  'dappSummary' : IDL.Text,
+});
+export const Story = IDL.Record({
+  'author' : IDL.Text,
+  'loveNote' : IDL.Text,
+  'image' : IDL.Text,
+});
+export const FeaturedStory = IDL.Record({
+  'title' : IDL.Text,
+  'quote' : Story,
+  'intro' : IDL.Text,
+});
+export const Section2 = IDL.Record({
+  'title' : IDL.Text,
+  'subtitle' : IDL.Vec(IDL.Text),
+});
+export const ValentineContent = IDL.Record({
+  'featuredDapps' : IDL.Vec(FeaturedDapp),
+  'featuredStories' : IDL.Vec(FeaturedStory),
+  'section2' : Section2,
+  'featuredGameStory' : Story,
+});
+
+export const idlService = IDL.Service({
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getPublishedContent' : IDL.Func([], [ValentineContent], ['query']),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'updatePublishedContent' : IDL.Func([ValentineContent], [], []),
+});
 
 export const idlInitArgs = [];
 
-export const idlFactory = ({ IDL }) => { return IDL.Service({}); };
+export const idlFactory = ({ IDL }) => {
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
+  const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  const FeaturedDapp = IDL.Record({
+    'projectName' : IDL.Text,
+    'author' : IDL.Text,
+    'dappBenefits' : IDL.Vec(IDL.Text),
+    'image' : IDL.Text,
+    'dappSummary' : IDL.Text,
+  });
+  const Story = IDL.Record({
+    'author' : IDL.Text,
+    'loveNote' : IDL.Text,
+    'image' : IDL.Text,
+  });
+  const FeaturedStory = IDL.Record({
+    'title' : IDL.Text,
+    'quote' : Story,
+    'intro' : IDL.Text,
+  });
+  const Section2 = IDL.Record({
+    'title' : IDL.Text,
+    'subtitle' : IDL.Vec(IDL.Text),
+  });
+  const ValentineContent = IDL.Record({
+    'featuredDapps' : IDL.Vec(FeaturedDapp),
+    'featuredStories' : IDL.Vec(FeaturedStory),
+    'section2' : Section2,
+    'featuredGameStory' : Story,
+  });
+  
+  return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getPublishedContent' : IDL.Func([], [ValentineContent], ['query']),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'updatePublishedContent' : IDL.Func([ValentineContent], [], []),
+  });
+};
 
 export const init = ({ IDL }) => { return []; };

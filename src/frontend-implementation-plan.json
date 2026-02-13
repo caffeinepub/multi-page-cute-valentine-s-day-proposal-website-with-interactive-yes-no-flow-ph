@@ -1,57 +1,79 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Remove Landing music UI and route YES directly to the final page",
+  "title": "Frontend published vs draft content flow with Publish + status UI",
   "requirements": [
     {
-      "id": "REQ-16",
-      "summary": "Remove the Landing page background music UI so no music controls render and no background audio element mounts by default.",
+      "id": "REQ-2",
+      "summary": "Load globally published ValentineContent from the backend as the base content while keeping local edits as a localStorage draft, with graceful fallback and English error messaging.",
       "acceptanceCriteria": [
-        "Landing page no longer renders the floating music player UI.",
-        "No <audio> element for background music is mounted anywhere in the UI by default.",
-        "All other Landing page content (heading, subheading, continue button, decorations) remains unchanged."
+        "On a fresh browser/device with no localStorage draft, the site renders content fetched from the backend.",
+        "If a local draft exists, the editor can continue editing without losing changes (draft remains stored locally).",
+        "If backend fetch fails, the site falls back gracefully (e.g., to existing defaults) and shows an error toast/message in English."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/LandingPage.tsx",
+          "path": "frontend/src/editing/EditableContentProvider.tsx",
           "operation": "modify",
-          "description": "Remove the MusicPlayer import and the <MusicPlayer /> render from the Landing page while leaving all other content/structure unchanged."
+          "description": "Add published-content loading on app start via the backend actor, store both publishedContent and local draft content in context, and update initialization logic so: (1) if no local draft, use backend published content; (2) if draft exists, keep draft but still fetch/remember latest published content for status + reload. Ensure backend fetch failures fall back to defaults and trigger an English error toast/message."
         },
         {
-          "path": "frontend/src/components/MusicPlayer.tsx",
-          "operation": "delete",
-          "description": "Remove the MusicPlayer component implementation so the background <audio> element and related UI controls cannot be mounted by default."
+          "path": "frontend/src/editing/usePublishedContent.ts",
+          "operation": "create",
+          "description": "Create a small React Query hook that uses the existing useActor hook to fetch the currently published ValentineContent from the backend (getPublishedContent) and surface loading/error states for the provider/UI."
+        },
+        {
+          "path": "frontend/src/editing/localDraftStorage.ts",
+          "operation": "modify",
+          "description": "Extend local draft utilities to support the new flow (e.g., expose a lightweight 'has draft' check and reuse clearDraftContent) so the provider can reliably decide whether to hydrate from backend published content vs an existing local draft."
         }
       ]
     },
     {
-      "id": "REQ-17",
-      "summary": "Change the proposal YES flow to skip the celebration page and navigate directly to the final page, and remove the celebration route from normal navigation.",
+      "id": "REQ-3",
+      "summary": "Provide a Publish action in Edit Mode that sends the current draft content to the backend and confirms success/failure in English without deleting the local draft on failure.",
       "acceptanceCriteria": [
-        "Tapping the YES button on the proposal page does not navigate to the current celebration page route.",
-        "After tapping YES, the app navigates directly to the final page route used for the end of the experience.",
-        "The removed/skipped celebration page is not reachable via normal in-app navigation (and any route/table-of-routes is updated accordingly)."
+        "When Edit Mode is active, there is a clear UI action labeled in English (e.g., “Publish changes”).",
+        "Clicking “Publish changes” calls the backend publish method with the current content state.",
+        "On success, a toast/confirmation appears in English and subsequent reloads on other devices show the newly published photos/letters.",
+        "On failure (auth/network/validation), an English error toast/message is shown and the local draft is not deleted."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/FinalPage.tsx",
-          "operation": "create",
-          "description": "Create a new FinalPage that represents the end of the experience, using the existing celebration content (message/date plan) and shadcn-ui Card/Accordion components for layout (Verify the component's usage instructions before implementing)."
-        },
-        {
-          "path": "frontend/src/pages/ProposalQuestionPage.tsx",
+          "path": "frontend/src/editing/EditableContentProvider.tsx",
           "operation": "modify",
-          "description": "Update the YES button handler to navigate directly to the final page route (e.g., '/final') instead of the current celebration route."
+          "description": "Add a publishDraft() (or equivalent) action to context that calls the backend actor updatePublishedContent with the current editable content, handles success/error, updates the cached publishedContent state on success, and never clears the local draft on failure."
         },
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/editing/EditModeToggle.tsx",
           "operation": "modify",
-          "description": "Wire the new FinalPage into the router as the end-of-experience route and remove the celebration page route/import so it is not reachable through normal in-app routing."
+          "description": "Add a new dropdown action visible only when Edit Mode is active labeled “Publish changes” that triggers the provider’s publish action and shows English success/error toasts via the existing Sonner/toast pattern. Use existing shadcn-ui dropdown/menu/button components (compose only; do not modify components under frontend/src/components/ui). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Show an edit-mode status indicator for Draft vs Published and provide a one-click action to discard the local draft and reload the latest published content from the backend.",
+      "acceptanceCriteria": [
+        "UI indicates at least: “Draft (not published)” vs “Published” status when in edit mode.",
+        "A “Reload published version” (or equivalent) action clears local draft content and re-fetches published content from the backend.",
+        "All user-facing status/labels are in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/editing/EditableContentProvider.tsx",
+          "operation": "modify",
+          "description": "Track whether the current in-memory content differs from the last fetched publishedContent (e.g., deep-compare) and expose a derived status (Draft vs Published) plus a reloadPublished() action that clears local draft content and rehydrates from backend published content (with English toast/errors on failure)."
         },
         {
-          "path": "frontend/src/pages/CelebrationPage.tsx",
-          "operation": "delete",
-          "description": "Remove the now-skipped CelebrationPage so there is no in-app route/page for the intermediate heart celebration step."
+          "path": "frontend/src/editing/EditModeToggle.tsx",
+          "operation": "modify",
+          "description": "In the Edit Mode dropdown, add a small English status label/indicator (e.g., “Status: Draft (not published)” vs “Status: Published”) and add a “Reload published version” action that clears the local draft and reloads from backend via the provider. Use existing shadcn-ui components (DropdownMenuItem/Separator, etc.) without modifying the underlying ui components. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/editing/localDraftStorage.ts",
+          "operation": "modify",
+          "description": "Ensure clearDraftContent is used by the new “Reload published version” flow and that draft-clearing is robust (no throw) so editors can reliably discard local changes before re-fetching published content."
         }
       ]
     }

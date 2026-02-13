@@ -1,53 +1,93 @@
 {
   "kind": "build_request",
-  "title": "Remove background music UI and skip the celebration page after tapping YES",
+  "title": "Add a true “Publish updated edits” flow so the live site reflects edited photos and letters",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-16",
-      "text": "Remove the background music section from the Landing page so no music controls are shown and no background audio element is mounted.",
-      "target": "frontend",
+      "id": "REQ-1",
+      "text": "Implement backend persistence for the site’s ValentineContent so edits can be published and visible to all visitors (not just the editor’s browser localStorage). Add backend methods to: (1) return the currently published content, and (2) update/overwrite the published content, restricting updates to an authorized admin identity (e.g., the caller principal allowlist).",
+      "target": "backend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "remove the  background music section"
+          "i tried in private mode but still showing the same old version can you tell me how to re- publish the edited version"
         ]
       },
       "acceptanceCriteria": [
-        "Landing page no longer renders the floating music player UI.",
-        "No <audio> element for background music is mounted anywhere in the UI by default.",
-        "All other Landing page content (heading, subheading, continue button, decorations) remains unchanged."
+        "Backend exposes a query method to fetch the currently published ValentineContent.",
+        "Backend exposes an update method to publish (overwrite) ValentineContent.",
+        "Unauthorized callers cannot publish new content (publish attempt is rejected with a clear error).",
+        "Published content is stored in stable state so it persists across canister upgrades/redeploys."
       ]
     },
     {
-      "id": "REQ-17",
-      "text": "Update the proposal YES button flow to skip the current heart celebration page and navigate directly to the final page after the user taps YES.",
+      "id": "REQ-2",
+      "text": "Update the frontend content-loading logic to distinguish between (a) the globally published content (fetched from the backend) and (b) the local draft edits (stored in localStorage). On initial load, fetch published content from the backend and use it as the base content; allow local edits to continue to auto-save as a draft in localStorage.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "remove the heart celebration page after i tap on YESS instead land directly on last pae after i tap on YESS"
+          "still showing the same old version",
+          "re- publish the edited version"
         ]
       },
       "acceptanceCriteria": [
-        "Tapping the YES button on the proposal page does not navigate to the current celebration page route.",
-        "After tapping YES, the app navigates directly to the final page route used for the end of the experience.",
-        "The removed/skipped celebration page is not reachable via normal in-app navigation (and any route/table-of-routes is updated accordingly)."
+        "On a fresh browser/device with no localStorage draft, the site renders content fetched from the backend.",
+        "If a local draft exists, the editor can continue editing without losing changes (draft remains stored locally).",
+        "If backend fetch fails, the site falls back gracefully (e.g., to existing defaults) and shows an error toast/message in English."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a “Publish” action in the Edit Mode UI that sends the current edited draft content to the backend publish endpoint, then confirms success and updates the app to reflect that the published version is now updated.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "how to re- publish the edited version"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When Edit Mode is active, there is a clear UI action labeled in English (e.g., “Publish changes”).",
+        "Clicking “Publish changes” calls the backend publish method with the current content state.",
+        "On success, a toast/confirmation appears in English and subsequent reloads on other devices show the newly published photos/letters.",
+        "On failure (auth/network/validation), an English error toast/message is shown and the local draft is not deleted."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add a small status indicator for editors that communicates whether they are viewing local draft changes vs the currently published version, and provide a one-click way to discard local draft and reload the latest published content.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "still showing the same old version"
+        ]
+      },
+      "acceptanceCriteria": [
+        "UI indicates at least: “Draft (not published)” vs “Published” status when in edit mode.",
+        "A “Reload published version” (or equivalent) action clears local draft content and re-fetches published content from the backend.",
+        "All user-facing status/labels are in English."
       ]
     }
   ],
   "constraints": [
-    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
-    "No backend changes are required; keep the backend as-is (single Motoko actor).",
-    "Use English for any user-facing text."
+    "Do not edit files in frontend immutablePaths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui (compose these components, do not modify them).",
+    "Backend must remain a single Motoko actor in backend/main.mo (no additional backend services).",
+    "Do not require any external databases or third-party auth providers; use Internet Identity/caller principal checks only."
   ],
   "nonGoals": [
-    "Adding new background music features or settings.",
-    "Adding new pages or changing the overall visual theme beyond what is required to remove the music section and adjust YES navigation."
+    "Do not implement third-party login providers (Google/Facebook/Auth0).",
+    "Do not add real-time updates (no WebSockets/live collaboration).",
+    "Do not change the site’s domain/publishing rules logic; this request is specifically about ensuring edited content is actually what gets published and shown to others."
   ],
   "imageRequirements": {
     "required": [],

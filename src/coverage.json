@@ -1,58 +1,86 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T19:31:08.356Z",
+  "generatedAt": "2026-02-13T06:26:59.655Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 4,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-16",
-        "summary": "Remove the background music section from the Landing page so no music controls are shown and no background audio element is mounted.",
+        "id": "REQ-1",
+        "summary": "Implement backend persistence for the site’s ValentineContent so edits can be published and visible to all visitors (not just the editor’s browser localStorage). Add backend methods to: (1) return the currently published content, and (2) update/overwrite the published content, restricting updates to an authorized admin identity (e.g., the caller principal allowlist).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Update the frontend content-loading logic to distinguish between (a) the globally published content (fetched from the backend) and (b) the local draft edits (stored in localStorage). On initial load, fetch published content from the backend and use it as the base content; allow local edits to continue to auto-save as a draft in localStorage.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/LandingPage.tsx",
-          "frontend/src/components/MusicPlayer.tsx"
+          "frontend/src/editing/EditableContentProvider.tsx",
+          "frontend/src/editing/usePublishedContent.ts",
+          "frontend/src/editing/localDraftStorage.ts"
         ],
         "matchedFiles": [
-          "frontend/src/pages/LandingPage.tsx",
-          "frontend/src/components/MusicPlayer.tsx"
+          "frontend/src/editing/EditableContentProvider.tsx",
+          "frontend/src/editing/localDraftStorage.ts"
         ]
       },
       {
-        "id": "REQ-17",
-        "summary": "Update the proposal YES button flow to skip the current heart celebration page and navigate directly to the final page after the user taps YES.",
+        "id": "REQ-3",
+        "summary": "Add a “Publish” action in the Edit Mode UI that sends the current edited draft content to the backend publish endpoint, then confirms success and updates the app to reflect that the published version is now updated.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/FinalPage.tsx",
-          "frontend/src/pages/ProposalQuestionPage.tsx",
-          "frontend/src/App.tsx",
-          "frontend/src/pages/CelebrationPage.tsx"
+          "frontend/src/editing/EditableContentProvider.tsx",
+          "frontend/src/editing/EditModeToggle.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/FinalPage.tsx",
-          "frontend/src/pages/ProposalQuestionPage.tsx",
-          "frontend/src/App.tsx",
-          "frontend/src/pages/CelebrationPage.tsx"
+          "frontend/src/editing/EditableContentProvider.tsx",
+          "frontend/src/editing/EditModeToggle.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Add a small status indicator for editors that communicates whether they are viewing local draft changes vs the currently published version, and provide a one-click way to discard local draft and reload the latest published content.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/editing/EditableContentProvider.tsx",
+          "frontend/src/editing/EditModeToggle.tsx",
+          "frontend/src/editing/localDraftStorage.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/editing/EditableContentProvider.tsx",
+          "frontend/src/editing/EditModeToggle.tsx",
+          "frontend/src/editing/localDraftStorage.ts"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/authorization/MixinAuthorization.mo",
+    "backend/authorization/access-control.mo",
+    "backend/main.mo",
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/App.tsx",
-    "frontend/src/components/MusicPlayer.tsx",
-    "frontend/src/pages/CelebrationPage.tsx",
-    "frontend/src/pages/FinalPage.tsx",
-    "frontend/src/pages/LandingPage.tsx",
-    "frontend/src/pages/ProposalQuestionPage.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/editing/EditModeToggle.tsx",
+    "frontend/src/editing/EditableContentProvider.tsx",
+    "frontend/src/editing/localDraftStorage.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/utils/urlParams.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
